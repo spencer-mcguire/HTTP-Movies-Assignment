@@ -27,6 +27,15 @@ export const UpdateMovie = props => {
     });
   };
 
+  const handleStars = index => e => {
+    setThisMovie({
+      ...thisMovie,
+      stars: thisMovie.stars.map((star, starIndex) => {
+        return starIndex === index ? e.target.value : star;
+      })
+    });
+  };
+
   const updateMovie = e => {
     e.preventDefault();
     axios
@@ -60,12 +69,12 @@ export const UpdateMovie = props => {
         value={thisMovie.metascore}
         placeholder="metascore"
       />
-      {thisMovie.stars.map(i => (
+      {thisMovie.stars.map((i, index) => (
         <input
           type="text"
           name="stars"
-          onChange={handleChanges}
-          value={i.index}
+          onChange={handleStars(index)}
+          value={i}
           placeholder="stars"
         />
       ))}
