@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 export const UpdateMovie = props => {
+  console.log(props.movies);
   const [thisMovie, setThisMovie] = useState({
     title: "",
     director: "",
@@ -9,11 +10,13 @@ export const UpdateMovie = props => {
   });
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:5000/api/movies/${props.match.params.id}`)
-      .then(res => setThisMovie(res.data))
-      .catch(err => console.log(err));
-  }, [props.match.params.id]);
+    const itemToEdit = props.movies.find(
+      e => `${e.id}` === props.match.params.id
+    );
+    if (itemToEdit) {
+      setThisMovie(itemToEdit);
+    }
+  }, [props.movies, props.match.params.id]);
 
   const handleChanges = e => {
     e.persist();
@@ -28,7 +31,11 @@ export const UpdateMovie = props => {
     e.preventDefault();
     axios
       .put(`http://localhost:5000/api/movies/${thisMovie.id}`, thisMovie)
-      .then(res => console.log(res))
+      .then(res => {
+        props.update(
+          props.movies.map(i => (`${i.id}` === res.data.id ? res.data : i))
+        );
+      })
       .catch(err => console.log(err));
     props.history.push("/");
   };
@@ -60,10 +67,3 @@ export const UpdateMovie = props => {
     </form>
   );
 };
-
-// const itemToEdit = props.movie.find(
-//     e => `${e.id}` === props.match.params.id
-//   );
-//   if (itemToEdit) {
-//     setThisMovie(itemToEdit);
-//   }
