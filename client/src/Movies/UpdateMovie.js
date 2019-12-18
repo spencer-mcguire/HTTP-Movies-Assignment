@@ -30,7 +30,7 @@ export const UpdateMovie = props => {
       .put(`http://localhost:5000/api/movies/${thisMovie.id}`, thisMovie)
       .then(res => console.log(res))
       .catch(err => console.log(err));
-    props.history.push(`/movies/${thisMovie.id}`);
+    props.history.push("/");
   };
 
   return (
