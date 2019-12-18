@@ -28,9 +28,8 @@ export const UpdateMovie = props => {
     e.preventDefault();
     axios
       .put(`http://localhost:5000/api/movies/${thisMovie.id}`, thisMovie)
-      .then(res => console.log(res))
+      .then(res => props.history.push("/"))
       .catch(err => console.log(err));
-    props.history.push("/");
   };
 
   return (
