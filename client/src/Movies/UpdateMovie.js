@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 export const UpdateMovie = props => {
-  console.log(props.movies);
   const [thisMovie, setThisMovie] = useState({
     title: "",
     director: "",
-    metascore: ""
+    metascore: "",
+    stars: []
   });
-
+  console.log(thisMovie);
   useEffect(() => {
     const itemToEdit = props.movies.find(
       e => `${e.id}` === props.match.params.id
@@ -23,7 +23,7 @@ export const UpdateMovie = props => {
     setThisMovie({
       ...thisMovie,
       [e.target.name]:
-        e.target.name === "metascore" ? +e.target.value : e.target.value
+        e.target.name === "metascore" ? +e.target.value : [e.target.value]
     });
   };
 
@@ -32,12 +32,9 @@ export const UpdateMovie = props => {
     axios
       .put(`http://localhost:5000/api/movies/${thisMovie.id}`, thisMovie)
       .then(res => {
-        props.update(
-          props.movies.map(i => (`${i.id}` === res.data.id ? res.data : i))
-        );
+        props.history.push("/");
       })
       .catch(err => console.log(err));
-    props.history.push("/");
   };
 
   return (
@@ -63,6 +60,16 @@ export const UpdateMovie = props => {
         value={thisMovie.metascore}
         placeholder="metascore"
       />
+      {thisMovie.stars.map(i => (
+        <input
+          type="text"
+          name="stars"
+          onChange={handleChanges}
+          value={i.index}
+          placeholder="stars"
+        />
+      ))}
+
       <button>Update</button>
     </form>
   );
