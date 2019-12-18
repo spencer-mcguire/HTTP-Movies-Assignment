@@ -13,7 +13,7 @@ export const UpdateMovie = props => {
       .get(`http://localhost:5000/api/movies/${props.match.params.id}`)
       .then(res => setThisMovie(res.data))
       .catch(err => console.log(err));
-  }, []);
+  }, [props.match.params.id]);
 
   const handleChanges = e => {
     e.persist();
